@@ -18,7 +18,9 @@ use PHPUnit\Framework\TestCase;
 class DemoTest extends TestCase {
 
     public function test_foo() {
-
+        $service = new Demo(new AppLogger(), new HttpRequest());
+        $res = $service->foo();
+        $this->assertEquals('bar', $res);
     }
 
     public function test_get_user_info() {

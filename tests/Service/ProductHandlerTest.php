@@ -64,5 +64,35 @@ class ProductHandlerTest extends TestCase
         }
 
         $this->assertEquals(143, $totalPrice);
+        
+        $this->assertEquals(143, ProductHandler::getTotalPrice($this->products));
+        $this->assertEquals(0, ProductHandler::getTotalPrice(null));
     }
+    
+    
+    public function testGetDessertProductsSortByPrice()
+    {
+        $expect = [$this->products[4], $this->products[3]];
+        $res = ProductHandler::getDessertProductsSortByPrice($this->products);
+
+        $this->assertEquals($expect, $res);
+        $this->assertJsonStringEqualsJsonString(json_encode($expect), json_encode($res));
+        $this->assertEquals([], ProductHandler::getDessertProductsSortByPrice(null));
+    }
+
+
+
+    public function testTransformProductsCreateTime()
+    {
+        $res = ProductHandler::transformProductsCreateTime($this->products);
+        $this->assertCount(count($this->products), $res);
+        for ($i = 0; $i < count($this->products); $i++) {
+            $this->assertIsInt($res[$i]['create_at']);
+            $this->assertEquals(strtotime($this->products[$i]['create_at']), $res[$i]['create_at']);
+        }
+
+        $this->assertNull(ProductHandler::transformProductsCreateTime(null));
+    }
+    
+    
 }
